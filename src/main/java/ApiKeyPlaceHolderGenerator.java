@@ -10,23 +10,15 @@ import static constants.Constants.NumericalLimits.MINIMUM_NUMBER_OF_PLACEHOLDERS
 import static constants.Constants.NumericalLimits.INT_ZERO;
 
 public class ApiKeyPlaceHolderGenerator {
-    private String alphaNumericChars = ALPHA_NUMERIC_CHARS;
 
     public List<String> generatePlaceholders(int numberOfPlaceholdersToGenerate, int placeholderStringLength) {
         numberOfPlaceholdersToGenerate = validateNumberOfPlaceHoldersTogenerateInput(numberOfPlaceholdersToGenerate);
         byte[] array = validatePlaceholderStringLengthRequirement(placeholderStringLength);
-        List<String> generatedPlaceholders = new ArrayList();
-        StringBuilder stringBuilder;
-        int randomCharacterIndex;
+        List<String> generatedPlaceholders = new ArrayList<>();
 
         for(int count = 0; count < numberOfPlaceholdersToGenerate; count++){
-            stringBuilder = new StringBuilder();
-            for(int index=0; index < array.length; index++){
-                randomCharacterIndex = ((int)(Math.random()*alphaNumericChars.length()));
-                stringBuilder.append(alphaNumericChars.charAt(randomCharacterIndex));
-            }
             generatedPlaceholders.add( new SimpleDateFormat(YEAR_MONTH_DATE_HOUR_MIN_SEC_MILI)
-                    .format(new Date()) + "-" + stringBuilder.toString()
+                    .format(new Date()) + "-" + generateRandomStringFromByteArrayOfLength(array.length)
             );
         }
 
@@ -51,6 +43,21 @@ public class ApiKeyPlaceHolderGenerator {
         }
 
         return numberOfPlaceholdersToGenerate;
+
+    }
+
+    private String generateRandomStringFromByteArrayOfLength(int lengthOfByteArray){
+        final String alphaNumericChars = ALPHA_NUMERIC_CHARS;
+        StringBuilder stringBuilder = new StringBuilder();
+        byte[] byteArray = new byte[lengthOfByteArray];
+        int randomCharacterIndex;
+
+        for(int index=0; index < byteArray.length; index++){
+            randomCharacterIndex = ((int)(Math.random()*alphaNumericChars.length()));
+            stringBuilder.append(alphaNumericChars.charAt(randomCharacterIndex));
+        }
+
+        return stringBuilder.toString();
 
     }
 
