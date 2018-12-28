@@ -2,6 +2,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import static constants.Constants.CustomStrings.MOCK_API_PLACEHOLDER;
@@ -32,6 +33,17 @@ public class ApiKeyAllocatorTest {
         assertThat("key length must be greater than zero",
                 (actual.get(MOCK_API_PLACEHOLDER).toString().length() > 0),
                 is(equalTo(true)));
+
+    }
+
+    @Test
+    public void itShouldAssignMulitipleApiKeysWhenPassedATextFileContainingMultiplePlaceholderStrings() throws IOException {
+        JSONObject actual = apiKeyAllocator.allocateApiKeyToPlaceholdersFromTextFile("src\\test\\resources\\placeholders.txt");
+
+        assertThat("two api-keys must be assigned",
+                actual.keySet().toArray().length,
+                is(equalTo(2))
+        );
 
     }
 
